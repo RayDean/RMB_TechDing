@@ -2,6 +2,10 @@
 
 这是TinyMind人民币编码识别竞赛，第三名（团队名：TechDing）的代码，欢迎大家下载交流。
 
+### 核心思想：
+
+<img src="core.PNG"/>
+
 ### 使用方法：
 
 1. 首先vim打开config.cfg，设置src_imgs_folder为需要预测的图片文件夹目录，

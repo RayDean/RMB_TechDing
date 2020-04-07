@@ -5,15 +5,11 @@
 # Written by Yu Xiang
 # --------------------------------------------------------
 
-import math
-
 import numpy as np
-
+import math
 # TODO: make fast_rcnn irrelevant
 # >>>> obsolete, because it depends on sth outside of this project
 from ..fast_rcnn.config import cfg
-
-
 # <<<< obsolete
 
 def get_boxes_grid(image_height, image_width):
@@ -49,7 +45,7 @@ def get_boxes_grid(image_height, image_width):
     # compute the grid box centers
     h = np.arange(height)
     w = np.arange(width)
-    y, x = np.meshgrid(h, w, indexing='ij')
+    y, x = np.meshgrid(h, w, indexing='ij') 
     centers = np.dstack((x, y))
     centers = np.reshape(centers, (-1, 2))
     num = centers.shape[0]
@@ -61,19 +57,19 @@ def get_boxes_grid(image_height, image_width):
     widths = np.zeros((1, num_aspect), dtype=np.float32)
     heights = np.zeros((1, num_aspect), dtype=np.float32)
     for i in range(num_aspect):
-        widths[0, i] = math.sqrt(area / aspect[i])
-        heights[0, i] = widths[0, i] * aspect[i]
+        widths[0,i] = math.sqrt(area / aspect[i])
+        heights[0,i] = widths[0,i] * aspect[i]
 
     # construct grid boxes
     centers = np.repeat(centers, num_aspect, axis=0)
     widths = np.tile(widths, num).transpose()
     heights = np.tile(heights, num).transpose()
 
-    x1 = np.reshape(centers[:, 0], (-1, 1)) - widths * 0.5
-    x2 = np.reshape(centers[:, 0], (-1, 1)) + widths * 0.5
-    y1 = np.reshape(centers[:, 1], (-1, 1)) - heights * 0.5
-    y2 = np.reshape(centers[:, 1], (-1, 1)) + heights * 0.5
-
+    x1 = np.reshape(centers[:,0], (-1, 1)) - widths * 0.5
+    x2 = np.reshape(centers[:,0], (-1, 1)) + widths * 0.5
+    y1 = np.reshape(centers[:,1], (-1, 1)) - heights * 0.5
+    y2 = np.reshape(centers[:,1], (-1, 1)) + heights * 0.5
+    
     boxes_grid = np.hstack((x1, y1, x2, y2)) / cfg.TRAIN.SPATIAL_SCALE
 
-    return boxes_grid, centers[:, 0], centers[:, 1]
+    return boxes_grid, centers[:,0], centers[:,1]

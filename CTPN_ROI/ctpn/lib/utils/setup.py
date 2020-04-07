@@ -19,7 +19,7 @@ def locate_cuda():
     # first check if the CUDAHOME env variable is in use
     if 'CUDAHOME' in os.environ:
         home = os.environ['CUDAHOME']
-        nvcc = pjoin(home, 'bin', 'nvcc')
+        nvcc = pjoin(home, 'bin', 'nvcc.exe')
     else:
         # otherwise, search the PATH for NVCC
         default_path = pjoin(os.sep, 'usr', 'local', 'cuda', 'bin')
@@ -31,7 +31,7 @@ def locate_cuda():
 
     cudaconfig = {'home': home, 'nvcc': nvcc,
                   'include': pjoin(home, 'include'),
-                  'lib64': pjoin(home, 'lib64')}
+                  'lib64': pjoin(home, 'lib', 'x64')}
     for k, v in cudaconfig.items():
         # for k, v in cudaconfig.iteritems():
         if not os.path.exists(v):
@@ -74,7 +74,8 @@ def customize_compiler_for_nvcc(self):
 # run the customize_compiler
 class custom_build_ext(build_ext):
     def build_extensions(self):
-        customize_compiler_for_nvcc(self.compiler)
+        # customize_compiler_for_nvcc(self.compiler) # MSVCComplier doesn't support this.
+        self.compiler.src_extensions.append('.cu')
         build_ext.build_extensions(self)
 
 
@@ -82,13 +83,13 @@ ext_modules = [
     Extension(
         "utils.bbox",
         ["bbox.pyx"],
-        extra_compile_args={'gcc': ["-Wno-cpp", "-Wno-unused-function"]},
+        # extra_compile_args={'gcc': ["-Wno-cpp", "-Wno-unused-function"]},  # doesn't support
         include_dirs=[numpy_include]
     ),
     Extension(
         "utils.cython_nms",
         ["cython_nms.pyx"],
-        extra_compile_args={'gcc': ["-Wno-cpp", "-Wno-unused-function"]},
+        # extra_compile_args={'gcc': ["-Wno-cpp", "-Wno-unused-function"]},  # doesn't support
         include_dirs=[numpy_include]
     ),
     Extension('utils.gpu_nms',
@@ -96,13 +97,19 @@ ext_modules = [
               library_dirs=[CUDA['lib64']],
               libraries=['cudart'],
               language='c++',
-              runtime_library_dirs=[CUDA['lib64']],
-              extra_compile_args={'gcc': ["-Wno-unused-function"],
-                                  'nvcc': ['-arch=sm_35',
+              # runtime_library_dirs=[CUDA['lib64']],  # doesn't support
+              extra_compile_args={'nvcc': [r'-IC:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include',
+                                           '-odir', r'build\temp.win-amd64-3.6\Release',
+                                           '-arch=sm_35',
                                            '--ptxas-options=-v',
                                            '-c',
-                                           '--compiler-options',
-                                           "'-fPIC'"]},
+                                           '-Xcompiler=/wd4819,/EHsc,/W3,/nologo,/O2,/Zi,/MD']},  # 不清楚这里传递的编译器参数是否最优
+              # extra_compile_args={'gcc': ["-Wno-unused-function"],
+              #                     'nvcc': ['-arch=sm_35',
+              #                              '--ptxas-options=-v',
+              #                              '-c',
+              #                              '--compiler-options',
+              #                              '-fPIC']},   # doesn't support
               include_dirs=[numpy_include, CUDA['include']]
               ),
 ]

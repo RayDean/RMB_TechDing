@@ -2,6 +2,8 @@
 
 这是TinyMind人民币编码识别竞赛，第三名（团队名：TechDing）的代码，欢迎大家下载交流。
 
+具体竞赛内容和排名请查看官网网址：https://www.tinymind.cn/competitions/47
+
 ### 核心思想：
 
 <img src="core.PNG"/>
@@ -21,4 +23,17 @@
     在Windows下无法运行。
     在预测时默认使用第0个GPU来运行，需要注意该GPU没有被其他应用程序占用。
 
+### 数据下载：
 
+
+决赛数据集下载地址：
+https://www.tinymind.cn/link/oss?bucketName=tinymind-competition&objectName=rmb/private_test_data.zip
+
+面值识别挑战数据下载地址：https://pan.baidu.com/s/1oZ4yMlTU3YwnX9KR0huzyQ 提取码：k7bc
+
+如果百度网盘下载慢，可以通过以下链接下载训练集\测试集（其他内容需从百度网盘下载）：
+12G训练集：https://drive.google.com/drive/folders/1ZWhydsGit1pRNhMRiqpSGV6dPQbYbZFn
+
+4G测试集：https://drive.google.com/drive/folders/1L6dB3jSJ6eVpdCw-XCL2c8LUOeu87QQ_
+
+人民币编码识别挑战预赛数据集下载地址：https://pan.baidu.com/s/1UDkxZSbLA96D8LGnNap5Bw 提取码：bff8

@@ -1,6 +1,4 @@
 import time
-
-
 class Timer(object):
     def __init__(self):
         self.total_time = 0.

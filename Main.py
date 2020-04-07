@@ -36,7 +36,7 @@ if __name__ == '__main__':
     temp_folder=os.path.abspath('./TEMP')
     if os.path.exists(temp_folder): # 如果存在则清空
         shutil.rmtree(temp_folder)
-    os.makedirs(temp_folder)
+    os.makedirs(temp_folder,exist_ok=True)
 
     ### 第一步：使用CV_ROI模块中的extract_ROI.py来提取出图片中的ROI，并保存到一个临时文件夹中
     print('start to extract_CV_roi imgs by CV_ROI module')
@@ -46,6 +46,8 @@ if __name__ == '__main__':
     get_save_roi(src_imgs_folder,CV_roi_imgs)
     print('extraxt CV_roi imgs DONE!')
 
+    # sys.exit(0) # 只测试上面的部分
+
     ### 第二步：使用CTPN_ROI模块中的extract_ROI.py来提取出图片中的ROI，并保存到另一个临时文件夹中
     # 下面的代码必须在Linux中运行，Windows下会出错
     print('start to extract CTPN_roi imgs by CTPN_ROI module')
@@ -54,7 +56,9 @@ if __name__ == '__main__':
     os.makedirs(CTPN_roi_imgs)
     get_save_ctpn_roi(src_imgs_folder,CTPN_roi_imgs)
     print('extract CTPN_roi imgs DONE!')
-    
+
+    # sys.exit(0) # 只测试上面的部分
+
     ### 第三步：将提取的ROI图片整理为npy格式的数据集，并保存该数据集到临时文件夹中，用于后续CTC_Models的编码预测
     print('start to load CV_rois to setX.npy')
     from CTC_Models import load_roi_setX
